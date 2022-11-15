@@ -1,0 +1,38 @@
+http://egloos.zum.com/gyumee/v/2483659 - DDL auto
+https://stackoverflow.com/questions/221379/hibernate-hbm2ddl-auto-update-in-production - Hibernate update 왜 안될까
+https://velog.io/@banjjoknim/DB-Migration-Tool#script-locations - Flyway + JPABuddy
+https://velog.io/@dev_zzame/%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%B2%A0%EC%9D%B4%EC%8A%A4-%EC%B4%88%EA%B8%B0%ED%99%94-%EC%A0%84%EB%9E%B5-DDL-AUTO-%EC%98%B5%EC%85%98 - DB 초기화 전력
+
+https://lhwn.tistory.com/entry/13-DDL-AUTO-%EC%99%80-Flyway
+https://sabarada.tistory.com/193
+https://dallog.github.io/dallog-flyway/
+https://ecsimsw.tistory.com/entry/Flyway%EB%A1%9C-DB-Migration
+https://blog.gangnamunni.com/post/introducing-flyway/
+https://tecoble.techcourse.co.kr/post/2021-10-23-flyway/
+
+create : SessionFactory 시작시 스키마를 삭제하고 다시 생성
+create-drop : SessionFactory 종료시 스키마를 삭제
+update : SessionFactory 시작시 객체 구성와 스키마를 비교하여 컬럼 추가/삭제 작업을 진행함. 기존의 스키마를 삭제하지 않고 유지.
+validate : SessionFactory 시작시 객체구성과 스키마가 다르다면 예외 발생시킴.
+
+
+운영장비의 경우 기존에 이미 데이터가 있는 경우이기에 update를 설정함으로 인해서
+테이블의 구성이 변경될 경우 예상치 못한 문제들이 발생할 수 있습니다.
+
+
+예를 들어서 기존에 데이터가 들어있던 컬럼이 alter 문으로 인해서 그 컬럼이 삭제되는 경우라던지
+혹은 새로운 컬럼을 추가하였는데 기존에 있던 데이터들의 경우 해당 컬럼에 값을 넣어주지 않았기 때문에
+null 값으로 설정이 되게 될텐데 이로 인해서 또 문제가 발생할 수도 있겠지요?
+
+
+- 운영장비에는 DDL-auto create , create-drop, update 사용하면 안된다.
+- alter table 쿼리를 날려도
+
+
+안녕하세요. 빡친사람님!
+데이터가 수천만 건 넘어가기 시작하면 ALTER TABLE이 점점 어려워집니다. 바로 LOCK이 걸리기 때문이지요.
+사실 컬럼을 추가할 때 락이 걸리는 것은 데이터베이스 마다 다르고, 같은 데이터베이스도 버전 마다 다릅니다. (그래서 DBA가 필요합니다^^;)
+그래서 pt online schema change 같은 지원 도구도 존재합니다.
+각각 데이터베이스 특성에 따라서 다르기 때문에 그때그때 상황에 맞추어 대응해야 합니다.
+(보통 큰 기업은 DBA 분들이 챙겨줍니다^^)
+감사합니다.
