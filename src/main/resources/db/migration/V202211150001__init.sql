@@ -2,8 +2,9 @@ CREATE SEQUENCE IF NOT EXISTS member_seq START WITH 1 INCREMENT BY 50;
 
 CREATE TABLE member
 (
-    id   BIGINT NOT NULL,
-    name VARCHAR(255),
+    id       BIGINT NOT NULL,
+    name     VARCHAR(255),
+    nickname VARCHAR(255),
     CONSTRAINT pk_member PRIMARY KEY (id)
 );
 
